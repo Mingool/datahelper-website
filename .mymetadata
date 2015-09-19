@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-module
+  type="WEB"
+  name="xdatahelp"
+  id="myeclipse.1430021201816"
+  context-root="/xdatahelp"
+  j2ee-spec="5.0"
+  archive="xdatahelp.war">
+  <attributes>
+    <attribute name="webrootdir" value="WebRoot" />
+  </attributes>
+</project-module>
+

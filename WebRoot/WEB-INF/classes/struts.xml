@@ -1,0 +1,117 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<!DOCTYPE struts PUBLIC
+    "-//Apache Software Foundation//DTD Struts Configuration 2.0//EN"
+    "http://struts.apache.org/dtds/struts-2.0.dtd">
+<struts>
+
+	<constant name="struts.enable.DynamicMethodInvocation" value="false" />
+	<constant name="struts.devMode" value="false" />
+
+	<package name="per-package" extends="struts-default">
+		<interceptors>
+			<interceptor name="permissionInterceptor"
+				class="edu.hebut.dh.interceptor.PermissionInterceptor"></interceptor>
+			<interceptor-stack name="myInterceptors">
+				<interceptor-ref name="permissionInterceptor"></interceptor-ref>
+				<interceptor-ref name="defaultStack"></interceptor-ref>
+			</interceptor-stack>
+		</interceptors>
+	</package>
+
+	<!-- 处理用户developer业务逻辑 -->
+	<package name="developer" namespace="/developer" extends="per-package">
+		<action name="login" class="edu.hebut.dh.action.LoginoutAction"
+			method="login">
+			<result name="success">/developer/back.jsp</result>
+			<result name="input">/index.jsp</result>
+		</action>
+		<action name="logout" class="edu.hebut.dh.action.LoginoutAction"
+			method="logout">
+			<interceptor-ref name="myInterceptors"></interceptor-ref>
+			<result name="success" type="redirect">/index.jsp</result>
+		</action>
+		<action name="user_getToken" class="edu.hebut.dh.action.GetTokenAction"
+			method="getToken">
+			<interceptor-ref name="myInterceptors"></interceptor-ref>
+			<result name="success" type="redirect">/developer/user_baseInfo.jsp
+			</result>
+			<result name="error">/developer/user_error.jsp</result>
+		</action>
+		<action name="user_createDB" class="edu.hebut.dh.action.CreateDBAction"
+			method="createDB">
+			<interceptor-ref name="myInterceptors"></interceptor-ref>
+			<result name="success" type="redirect">/developer/user_DBInfo.jsp
+			</result>
+			<result name="error">/developer/user_error.jsp</result>
+		</action>
+		<action name="user_leaveMessage" class="edu.hebut.dh.action.LeaveMessageAction"
+			method="execute">
+			<interceptor-ref name="myInterceptors"></interceptor-ref>
+			<result name="success">/developer/leaveMessage.jsp</result>
+			<result name="error">/developer/user_error.jsp</result>
+		</action>
+		<action name="user_accessCount" class="edu.hebut.dh.action.AccessCountAction"
+			method="execute">
+			<interceptor-ref name="myInterceptors"></interceptor-ref>
+			<result name="success">/developer/accessCount.jsp</result>
+			<result name="error">/developer/user_error.jsp</result>
+		</action>
+	</package>
+
+	<!-- 处理SDK接口业务 -->
+	<package name="interface" namespace="/connection" extends="per-package">
+		<action name="conn_executeSQL" class="edu.hebut.dh.action.ExecuteSQLAction"
+			method="execute">
+			<interceptor-ref name="myInterceptors"></interceptor-ref>
+			<result name="success" type="dispatcher">/developer/user_executeSQL.jsp
+			</result>
+			<result name="error" type="redirect">/developer/user_error.jsp</result>
+		</action>
+		<action name="conn_executeQuery" class="edu.hebut.dh.action.ConnectionQueryAction"
+			method="execute">
+			<result name="success" type="plainText">
+				<param name="location">/connection/connection_message.jsp</param>
+				<param name="charSet">UTF-8</param>
+			</result>
+			<result name="error">/connection/connection_error.jsp</result>
+			<result name="input">/connection/connection_error.jsp</result>
+		</action>
+		<action name="conn_executeUpdate" class="edu.hebut.dh.action.ConnectionUpdateAction"
+			method="execute">
+			<result name="success" type="plainText">
+				<param name="location">/connection/connection_message.jsp</param>
+				<param name="charSet">UTF-8</param>
+			</result>
+			<result name="error">/connection/connection_error.jsp</result>
+			<result name="input">/connection/connection_error.jsp</result>
+		</action>
+	</package>
+
+	<!-- 处理前台业务 -->
+	<package name="normal" namespace="/" extends="struts-default">
+		<action name="regist" class="edu.hebut.dh.action.RegistAction"
+			method="regist">
+			<result name="success">/message.jsp</result>
+			<result name="input">/regist.jsp</result>
+			<result name="error" type="redirect">/error.jsp</result>
+		</action>
+		<action name="download_sdk" class="edu.hebut.dh.action.DownloadAction"
+			method="downloadSDK">
+			<result name="success" type="stream">
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="${fileName}"</param>
+				<param name="contentCharSet">UTF-8</param>
+			</result>
+		</action>
+		<action name="download_api" class="edu.hebut.dh.action.DownloadAction"
+			method="downloadAPI">
+			<result name="success" type="stream">
+				<param name="contentType">application/octet-stream</param>
+				<param name="inputName">inputStream</param>
+				<param name="contentDisposition">attachment;filename="${fileName}"</param>
+				<param name="contentCharSet">UTF-8</param>
+			</result>
+		</action>
+	</package>
+</struts>
