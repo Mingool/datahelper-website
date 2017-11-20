@@ -6,6 +6,8 @@ Like Bmob cloud service http://www.bmob.cn/
 
 Its just a easy demo and I create it for the competition in my school (Hebei University of technology)
 
+***
+
 > Framework used in the project
 
 Struts2 DBUtils
